@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta name="referrer" content="no-referrer">
+<title>번역기</title>
+<meta name="theme-color" content="#f8fafc" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0f172a" media="(prefers-color-scheme: dark)">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="번역">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="icon" type="image/png" href="icon-192.png">
+<link rel="manifest" href="manifest.json">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<!-- translate-app -->
+<header class="topbar">
+  <h1>번역기</h1>
+  <button id="btnSettings" class="icon-btn" aria-label="설정" title="설정">⚙️</button>
+</header>
+
+<main id="mainView" hidden>
+  <section class="langbar">
+    <select id="srcLang" aria-label="원문 언어">
+      <option value="auto">자동 감지</option>
+      <option value="ko">한국어</option>
+      <option value="en">English</option>
+      <option value="th">ไทย</option>
+    </select>
+    <button id="btnSwap" class="icon-btn swap" aria-label="언어 바꾸기" title="언어 바꾸기">⇄</button>
+    <select id="tgtLang" aria-label="번역 언어">
+      <option value="ko">한국어</option>
+      <option value="en">English</option>
+      <option value="th">ไทย</option>
+    </select>
+  </section>
+
+  <section class="tonebar" role="radiogroup" aria-label="말투">
+    <label><input type="radio" name="tone" value="casual" checked><span>친구처럼</span></label>
+    <label><input type="radio" name="tone" value="polite"><span>정중하게</span></label>
+  </section>
+
+  <section class="card input-card">
+    <textarea id="srcText" placeholder="번역할 내용을 입력하세요" rows="5" autocapitalize="off" autocomplete="off" spellcheck="false"></textarea>
+    <div class="row-between">
+      <span id="detected" class="muted small"></span>
+      <div class="row">
+        <button id="btnPaste" class="ghost small-btn">붙여넣기</button>
+        <button id="btnClearSrc" class="ghost small-btn">지우기</button>
+      </div>
+    </div>
+  </section>
+
+  <details id="ctxBox" class="ctx">
+    <summary>대화 맥락 <span id="ctxPreview" class="muted small"></span></summary>
+    <textarea id="ctxText" rows="2" placeholder="예: 태국 친구랑 여행 얘기 중"></textarea>
+    <label class="check small"><input type="checkbox" id="useHistoryCtx" checked> 최근 번역 몇 개를 맥락으로 함께 보내기</label>
+  </details>
+
+  <button id="btnTranslate" class="primary">번역하기 <span class="kbd">Ctrl/⌘+Enter</span></button>
+
+  <section id="resultCard" class="card result-card" hidden>
+    <div class="row-between">
+      <span id="resultLang" class="muted small"></span>
+      <button id="btnCopy" class="ghost small-btn">복사</button>
+    </div>
+    <div id="resultText" class="result-text"></div>
+    <div id="altBox" class="alt" hidden>
+      <div class="row-between"><span class="muted small">다른 표현</span><button id="btnCopyAlt" class="ghost small-btn">복사</button></div>
+      <div id="altText"></div>
+    </div>
+    <div id="noteBox" class="note" hidden>
+      <span class="note-label">💡 참고</span>
+      <div id="noteText"></div>
+    </div>
+  </section>
+
+  <div id="errorBox" class="error" hidden></div>
+
+  <section class="history">
+    <div class="row-between">
+      <h2>최근 번역</h2>
+      <button id="btnClearHistory" class="ghost small-btn">전체 삭제</button>
+    </div>
+    <ul id="historyList"></ul>
+    <p id="historyEmpty" class="muted small">아직 기록이 없어요.</p>
+  </section>
+</main>
+
+<section id="settingsView" hidden>
+  <div class="card">
+    <h2 id="settingsTitle">설정</h2>
+    <p id="setupMsg" class="muted" hidden>처음 사용하려면 xAI API 키를 입력하세요. 키는 이 기기의 브라우저(localStorage)에만 저장되며, 번역 요청 시 xAI API로만 전송됩니다.</p>
+    <label class="field-label" for="apiKey">xAI API 키</label>
+    <div class="row">
+      <input id="apiKey" type="password" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="xai-...">
+      <button id="btnToggleKey" class="ghost small-btn" type="button">보기</button>
+    </div>
+    <p class="muted small">키는 <a href="https://console.x.ai" target="_blank" rel="noopener noreferrer">console.x.ai</a> 에서 발급받을 수 있어요 (API Keys 메뉴).</p>
+
+    <label class="field-label" for="modelName">모델 이름</label>
+    <input id="modelName" type="text" autocomplete="off" autocapitalize="off" spellcheck="false">
+    <p class="muted small">기본값: <code id="defaultModelLabel"></code> · 빠르고 저렴한 모델</p>
+
+    <label class="field-label" for="gender">태국어 존댓말 어미 (정중하게 모드)</label>
+    <select id="gender">
+      <option value="m">남성 (ครับ)</option>
+      <option value="f">여성 (ค่ะ / คะ)</option>
+    </select>
+
+    <div class="row settings-actions">
+      <button id="btnSaveSettings" class="primary">저장</button>
+      <button id="btnDeleteKey" class="danger">키 삭제</button>
+      <button id="btnCloseSettings" class="ghost">닫기</button>
+    </div>
+    <div id="settingsMsg" class="muted small"></div>
+  </div>
+</section>
+
+<div id="toast" class="toast" hidden></div>
+<script src="app.js"></script>
+</body>
+</html>

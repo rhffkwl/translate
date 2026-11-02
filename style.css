@@ -1,0 +1,81 @@
+:root{
+  --bg:#f8fafc; --card:#ffffff; --text:#0f172a; --muted:#64748b; --border:#e2e8f0;
+  --primary:#3b82f6; --primary2:#7c3aed; --danger:#dc2626; --note:#fef9c3; --note-text:#713f12;
+  --alt:#f1f5f9; --err-bg:#fee2e2; --err-text:#991b1b;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#0f172a; --card:#1e293b; --text:#e2e8f0; --muted:#94a3b8; --border:#334155;
+    --note:#3f3a1a; --note-text:#fde68a; --alt:#0f172a; --err-bg:#450a0a; --err-text:#fecaca;
+  }
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0; background:var(--bg); color:var(--text);
+  font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgun Gothic","Segoe UI","Noto Sans KR","Noto Sans Thai",Tahoma,sans-serif;
+  font-size:16px; line-height:1.5;
+  padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+}
+main,#settingsView{max-width:720px; margin:0 auto; padding:0 14px 32px}
+.topbar{max-width:720px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; padding:10px 14px}
+.topbar h1{font-size:20px; margin:0; background:linear-gradient(90deg,var(--primary),var(--primary2)); -webkit-background-clip:text; background-clip:text; color:transparent}
+h2{font-size:16px; margin:0 0 8px}
+button,select,input,textarea{font:inherit; color:inherit}
+button{cursor:pointer; -webkit-tap-highlight-color:transparent}
+.icon-btn{background:none; border:none; font-size:22px; padding:6px 8px; border-radius:10px}
+.icon-btn:active{background:var(--border)}
+.langbar{display:flex; gap:8px; align-items:center; margin-bottom:10px}
+.langbar select{flex:1; min-width:0}
+select,input[type=text],input[type=password]{
+  width:100%; padding:10px 12px; border:1px solid var(--border); border-radius:12px; background:var(--card);
+  font-size:16px; appearance:none; -webkit-appearance:none;
+}
+select{background-image:linear-gradient(45deg,transparent 50%,var(--muted) 50%),linear-gradient(135deg,var(--muted) 50%,transparent 50%);
+  background-position:calc(100% - 18px) 55%,calc(100% - 13px) 55%; background-size:5px 5px; background-repeat:no-repeat; padding-right:30px}
+.swap{font-size:20px; flex:none; border:1px solid var(--border); background:var(--card); width:44px; height:44px; padding:0}
+.tonebar{display:flex; gap:8px; margin-bottom:10px}
+.tonebar label{flex:1}
+.tonebar input{position:absolute; opacity:0; pointer-events:none}
+.tonebar span{display:block; text-align:center; padding:8px; border:1px solid var(--border); border-radius:12px; background:var(--card); font-size:14px}
+.tonebar input:checked + span{border-color:var(--primary); background:var(--primary); color:#fff}
+.tonebar input:focus-visible + span{outline:2px solid var(--primary2)}
+.card{background:var(--card); border:1px solid var(--border); border-radius:16px; padding:12px; margin-bottom:10px}
+textarea{width:100%; border:none; outline:none; resize:vertical; background:transparent; font-size:17px; min-height:110px}
+.ctx textarea{min-height:56px; border:1px solid var(--border); border-radius:12px; padding:8px 10px; background:var(--card); font-size:16px}
+.ctx{margin-bottom:10px}
+.ctx summary{cursor:pointer; padding:6px 2px; font-size:14px; color:var(--muted)}
+.check{display:flex; gap:6px; align-items:center; margin-top:6px; color:var(--muted)}
+.row{display:flex; gap:6px; align-items:center}
+.row-between{display:flex; justify-content:space-between; align-items:center; gap:8px}
+.muted{color:var(--muted)}
+.small{font-size:13px}
+.ghost{background:none; border:1px solid var(--border); border-radius:10px; padding:6px 10px}
+.small-btn{font-size:13px; padding:4px 10px; white-space:nowrap}
+.primary{width:100%; border:none; border-radius:14px; padding:14px; font-size:17px; font-weight:600; color:#fff;
+  background:linear-gradient(90deg,var(--primary),var(--primary2)); margin-bottom:12px}
+.primary:disabled{opacity:.6}
+.kbd{font-size:11px; opacity:.75; font-weight:400; margin-left:6px}
+@media (hover:none){.kbd{display:none}}
+.danger{border:1px solid var(--danger); color:var(--danger); background:none; border-radius:14px; padding:12px 14px; white-space:nowrap}
+.result-text{font-size:19px; white-space:pre-wrap; word-break:break-word; padding:6px 0; user-select:text; -webkit-user-select:text}
+.alt{background:var(--alt); border-radius:12px; padding:8px 10px; margin-top:8px; white-space:pre-wrap; word-break:break-word}
+.note{background:var(--note); color:var(--note-text); border-radius:12px; padding:8px 10px; margin-top:8px; font-size:14px; white-space:pre-wrap}
+.note-label{font-weight:600; font-size:13px}
+.error{background:var(--err-bg); color:var(--err-text); border-radius:12px; padding:10px 12px; margin-bottom:10px; font-size:14px; white-space:pre-wrap}
+.history ul{list-style:none; padding:0; margin:0}
+.history li{background:var(--card); border:1px solid var(--border); border-radius:12px; padding:8px 10px; margin-bottom:6px; cursor:pointer; position:relative}
+.history li .src{font-size:13px; color:var(--muted); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; padding-right:28px}
+.history li .tgt{font-size:15px; overflow:hidden; text-overflow:ellipsis; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical}
+.history li .del{position:absolute; right:4px; top:2px; border:none; background:none; color:var(--muted); font-size:16px; padding:4px 8px}
+.history .row-between{margin:14px 0 8px}
+.field-label{display:block; font-size:14px; font-weight:600; margin:14px 0 6px}
+.settings-actions{margin-top:18px}
+.settings-actions .primary{margin:0}
+.settings-actions .ghost{padding:12px 14px; border-radius:14px}
+code{font-size:12px; background:var(--alt); padding:1px 5px; border-radius:6px}
+a{color:var(--primary)}
+.toast{position:fixed; left:50%; transform:translateX(-50%); bottom:calc(20px + env(safe-area-inset-bottom)); background:#111827; color:#fff;
+  padding:8px 16px; border-radius:20px; font-size:14px; z-index:10; opacity:.95}
+.spinner{display:inline-block; width:14px; height:14px; border:2px solid rgba(255,255,255,.5); border-top-color:#fff; border-radius:50%; animation:spin .8s linear infinite; vertical-align:-2px; margin-right:6px}
+@keyframes spin{to{transform:rotate(360deg)}}
